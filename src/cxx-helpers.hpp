@@ -92,7 +92,9 @@ namespace perflib
 		 * Returns miss:ref ratio
 		 */
 		double ratio() const {
-			return static_cast<double>(misses()) / refs();
+			auto r = refs();
+			r = r == 0 ? 1 : r;
+			return static_cast<double>(misses()) / r;
 		}
 
 	protected:
