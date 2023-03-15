@@ -3,8 +3,38 @@
 
 #include "perf-counters.h"
 
+#include <chrono>
+
 namespace perflib
 {
+	/*
+	 * Simple timer
+	 */
+	class timer {
+	public:
+		inline void start() {
+			m_start = std::chrono::high_resolution_clock::now();
+		}
+
+		inline void reset() {
+			m_elapsed = m_elapsed.zero();
+		}
+
+		inline void stop() {
+			m_elapsed = std::chrono::high_resolution_clock::now() - m_start;
+		}
+
+		/* Returns elapsed time in ms */
+		inline double elapsed_ms() {
+			auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(m_elapsed);
+			return double(ns.count()) / 1e6;
+		}
+
+	private:
+		std::chrono::high_resolution_clock::time_point m_start;
+		std::chrono::high_resolution_clock::duration m_elapsed;
+	};
+
 	/*
 	 * Simple wrapper around a perf counter
 	 */
