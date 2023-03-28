@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 project(PerfLib CXX C)
 
-add_library(
-    perflib
+include(GNUInstallDirs)
 
+add_library(
+    perflib STATIC
     include/perflib/perflib.h
     src/perf-counters.h
     src/perf-counters.c
@@ -23,3 +24,13 @@ add_executable(
 target_link_libraries(
     perflib-test PRIVATE perflib
 )
+
+set_target_properties(perflib PROPERTIES PUBLIC_HEADER include/perflib/perflib.h)
+
+
+install(
+	TARGETS perflib
+	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/perflib
+)
+
+
